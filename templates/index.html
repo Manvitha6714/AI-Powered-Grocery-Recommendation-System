@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AI Grocery Recommendation System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🛒 AI Grocery Recommendation System</h1>
+
+<p class="description">
+Discover products that customers frequently purchase together using
+<b>Market Basket Analysis</b>.
+</p>
+
+<form method="POST">
+
+<label>Select Product</label>
+
+<select name="product" required>
+
+<option value="" disabled
+{% if selected_product=="" %}
+selected
+{% endif %}
+>
+Select a Product
+</option>
+
+{% for product in products %}
+
+<option
+value="{{product}}"
+
+{% if product==selected_product %}
+selected
+{% endif %}
+
+>
+
+{{product}}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+<button type="submit">
+
+🔍 Get Recommendations
+
+</button>
+
+</form>
+
+{% if recommendations is not none %}
+
+{% if recommendations.empty %}
+
+<div class="no-data">
+
+  No recommendations found for this product.
+
+</div>
+
+{% else %}
+
+<h2>Recommended Products</h2>
+
+<table>
+
+<tr>
+
+<th> Product</th>
+
+<th> Confidence</th>
+
+<th> Lift</th>
+
+</tr>
+
+{% for _,row in recommendations.iterrows() %}
+
+<tr>
+
+<td>
+
+{{row["Recommended Product"]}}
+
+</td>
+
+<td>
+
+{{"%.2f"|format(row["confidence"]*100)}} %
+
+</td>
+
+<td>
+
+{{"%.2f"|format(row["lift"])}}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+{% endif %}
+
+<div class="footer">
+
+MARKET BASKET ANALYSIS
+
+</div>
+
+</div>
+
+</body>
+
+</html>
